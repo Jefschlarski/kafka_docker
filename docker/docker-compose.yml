@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  broker:
+    build: 
+      context: .
+      dockerfile: ${PROJETO_DIR}/docker/kafka/Dockerfile
+    container_name: broker
+    ports:
+      - $PORTS_BROKER
+    env_file:
+      - ${PROJETO_DIR}/docker/environment/broker.env
+      - ${PROJETO_DIR}/docker/environment/create_topic.env
+    restart: $restart
+
+  control-center:
+    build: 
+      context: .
+      dockerfile: ${PROJETO_DIR}/docker/control_center/Dockerfile
+    depends_on:
+      - broker
+    ports:
+      - $PORTS_CONTROL_CENTER
+    env_file:
+      - ${PROJETO_DIR}/docker/environment/control_center.env
+    restart: $restart
